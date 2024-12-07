@@ -284,7 +284,7 @@ if info_options == 'Thông tin về sản phẩm':
                     ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
                     plt.xlabel('')
                     plt.ylabel('')
-                    plt.
+                   # plt.
                     # Tự động căn chỉnh layout
                     plt.tight_layout()
                     # Hiển thị biểu đồ
