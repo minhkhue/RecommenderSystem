@@ -22,7 +22,7 @@ from surprise.model_selection.validation import cross_validate
 from surprise import Reader, Dataset, SVD, SVDpp, NMF, SlopeOne, KNNBasic, KNNBaseline, KNNWithMeans, KNNWithZScore, CoClustering, BaselineOnly
 
 from gensim import corpora, models, similarities
-
+from streamlit_option_menu import option_menu
 label_encoder = LabelEncoder()
 
 # Load các emoji biểu cảm thường gặp
@@ -47,35 +47,53 @@ def load_model_and_tfidf():
 
 # Load model và tfidf
 surprise_model, gensim_tfidf, gensim_index, gensim_dictionary = load_model_and_tfidf()
-
-# Giao diện phần 'Tải dữ liệu lên hệ thống'
-st.sidebar.write('# :briefcase: Đồ án tốt nghiệp K299')
-st.sidebar.write('### :scroll: Project 2: Hệ thống gợi ý sản phẩm')
-# st.sidebar.write('### Hệ thống gợi ý sản phẩm')
-st.sidebar.write('### Menu:')
-info_options = st.sidebar.radio(
-    ':gear: Các chức năng:', 
-    options=['Tổng quan về hệ thống', 'Tải dữ liệu lên hệ thống', 'Tổng quan về dataset', 'Thông tin về sản phẩm', 'Hệ thống gợi ý sản phẩm']
-)
-st.sidebar.write('-'*3)
-st.sidebar.write('### :left_speech_bubble: Giảng viên hướng dẫn:')
-st.sidebar.write('### :female-teacher: Thạc Sỹ Khuất Thùy Phương')
+with st.sidebar:
+    selected = option_menu("MENU", ['Tổng quan về hệ thống', 'Tải dữ liệu lên hệ thống','Tổng quan về dataset','Thông tin về sản phẩm','Hệ thống gợi ý sản phẩm'], 
+        icons=['globe', 'cloud-upload-fill','info-circle','p-circle','body-text'], menu_icon="menu-button-wide", default_index=0)
 
 st.sidebar.write('-'*3)
-st.sidebar.write('#### Nhóm cùng thực hiện:')
-st.sidebar.write(' :boy: Nguyễn Minh Trí')
-st.sidebar.write(' :boy: Võ Huy Quốc')
-st.sidebar.write(' :boy: Phan Trần Minh Khuê')
+st.sidebar.write('### ĐỒ ÁN TỐT NGHIỆP K2999 ')
+st.sidebar.write('#### :dart: Project2: Recommender System')
 st.sidebar.write('-'*3)
-st.sidebar.write('#### :clock830: Thời gian thực hiện:')
-st.sidebar.write(':spiral_calendar_pad: 14/12/2024')
+st.sidebar.write('### GIẢNG VIÊN HƯỚNG DẪN')
+st.sidebar.write('#### :female-teacher: ThS. Khuất Thùy Phương')
+st.sidebar.write('-'*3)
+st.sidebar.write('### THÀNH VIÊN THỰC HIỆN')
+st.sidebar.write('#### :boy: Nguyễn Minh Trí')
+st.sidebar.write('#### :boy: Võ Huy Quốc')
+st.sidebar.write('#### :boy: Phan Trần Minh Khuê')
+st.sidebar.write('-'*3)
+st.sidebar.write('### THỜI GIAN THỰC HIỆN')
+st.sidebar.write('#### :spiral_calendar_pad: 14/12/2024')
+
+# # Giao diện phần 'Tải dữ liệu lên hệ thống'
+# st.sidebar.write('# :briefcase: Đồ án tốt nghiệp K299')
+# st.sidebar.write('### :scroll: Project 2: Hệ thống gợi ý sản phẩm')
+# # st.sidebar.write('### Hệ thống gợi ý sản phẩm')
+# st.sidebar.write('### Menu:')
+# info_options = st.sidebar.radio(
+#     ':gear: Các chức năng:', 
+#     options=['Tổng quan về hệ thống', 'Tải dữ liệu lên hệ thống', 'Tổng quan về dataset', 'Thông tin về sản phẩm', 'Hệ thống gợi ý sản phẩm']
+# )
+# st.sidebar.write('-'*3)
+# st.sidebar.write('### :left_speech_bubble: Giảng viên hướng dẫn:')
+# st.sidebar.write('### :female-teacher: Thạc Sỹ Khuất Thùy Phương')
+
+# st.sidebar.write('-'*3)
+# st.sidebar.write('#### Nhóm cùng thực hiện:')
+# st.sidebar.write(' :boy: Nguyễn Minh Trí')
+# st.sidebar.write(' :boy: Võ Huy Quốc')
+# st.sidebar.write(' :boy: Phan Trần Minh Khuê')
+# st.sidebar.write('-'*3)
+# st.sidebar.write('#### :clock830: Thời gian thực hiện:')
+# st.sidebar.write(':spiral_calendar_pad: 14/12/2024')
 
 ## Kiểm tra dữ liệu đã upload trước đó
 if 'uploaded_data' not in st.session_state:
     st.session_state['uploaded_data'] = None  # Khởi tạo nếu chưa có dữ liệu
     
 ## Các bước thực hiện
-if info_options == 'Tổng quan về hệ thống':
+if selected == 'Tổng quan về hệ thống':
     st.image('img/hasaki_logo.png', use_column_width=True)
     general_info_tabs = st.tabs(['Business Objective', 'Triển khai hệ thống'])
     with general_info_tabs[0]:
@@ -91,7 +109,7 @@ if info_options == 'Tổng quan về hệ thống':
         st.image('img/Gioi_thieu_proj2.PNG', use_column_width=True)
 
 ## Xem dữ liệu đã upload lên, đưa dữ liệu vào session để sử dụng lại được
-if info_options == 'Tải dữ liệu lên hệ thống':
+if selected == 'Tải dữ liệu lên hệ thống':
     st.image('img/hasaki_logo.png', use_column_width=True)
     st.header('Tải dữ liệu đầu vào')
 
@@ -116,7 +134,7 @@ if info_options == 'Tải dữ liệu lên hệ thống':
         st.dataframe(data[['ma_khach_hang', 'ho_ten', 'ma_san_pham', 'ten_san_pham', 'mo_ta', 'diem_trung_binh', 'so_sao', 'noi_dung_binh_luan', 'ngay_binh_luan', 'gia_ban']].head(5))
         st.dataframe(data[['ma_khach_hang', 'ho_ten', 'ma_san_pham', 'ten_san_pham', 'mo_ta', 'diem_trung_binh', 'so_sao', 'noi_dung_binh_luan', 'ngay_binh_luan', 'gia_ban']].tail(5))
 # Giao diện phần 'Tổng quan về dataset'
-if info_options == 'Tổng quan về dataset':
+if selected == 'Tổng quan về dataset':
     st.image('img/hasaki_logo.png', use_column_width=True)
     if st.session_state['uploaded_data'] is None:
         st.warning('Dataset chưa được tải lên')
@@ -218,7 +236,7 @@ if info_options == 'Tổng quan về dataset':
 
 
 # Giao diện phần 'Thông tin về sản phẩm'
-if info_options == 'Thông tin về sản phẩm':
+if selected == 'Thông tin về sản phẩm':
     st.image('img/hasaki_logo.png', use_column_width=True)
     if st.session_state['uploaded_data'] is None:
         st.warning('Dataset chưa được tải lên')
@@ -372,7 +390,7 @@ if info_options == 'Thông tin về sản phẩm':
             st.write(f'Không tìm thấy sản phẩm với ID: {st.session_state.selected_ma_san_pham}')
 #----------------------------------------------------------------------------------------------------#       
 # Giao diện phần 'Tổng quan về dataset'
-if info_options == 'Hệ thống gợi ý sản phẩm':
+if selected == 'Hệ thống gợi ý sản phẩm':
     st.image('img/hasaki_logo.png', use_column_width=True)
     if st.session_state['uploaded_data'] is None:
         st.warning('Dataset phục vụ hệ thống gợi ý sản phẩm chưa được tải lên')
