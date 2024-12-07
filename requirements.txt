@@ -11,3 +11,5 @@ pyvi
 wordcloud
 gensim==4.3.3
 surprise==0.1
+streamlit_option_menu
+streamlit_extras
